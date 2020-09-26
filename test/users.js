@@ -7,10 +7,32 @@ const TOKEN =
   'f23c96ab955134d34fb15a05c891320a81c0a6a309c9f481604e380d19bef872';
 
 describe('Users', () => {
-  it('GET /users', (done) => {
-    request.get(`users?access-token=${TOKEN}`).end((err, res) => {
+  it('GET /users', () => {
+    // request.get(`users?access-token=${TOKEN}`).end((err, res) => {
+    //   expect(res.body.data).to.not.be.empty;
+    //   done();
+    // });
+
+    return request.get(`users?access-token=${TOKEN}`).then((res) => {
       expect(res.body.data).to.not.be.empty;
-      done();
+    });
+  });
+
+  it('GET /users/:id', () => {
+    return request.get(`users/1?access-token=${TOKEN}`).then((res) => {
+      expect(res.body.data.id).to.be.eq(1);
+    });
+  });
+
+  it('GET /users with query params', () => {
+    const url = `users?access-token=${TOKEN}&page=5&gender=Female&status=Active`;
+
+    return request.get(url).then((res) => {
+      expect(res.body.data).to.not.be.empty;
+      res.body.data.forEach((data) => {
+        expect(data.gender).to.eq('Female');
+        expect(data.status).to.eq('Active');
+      });
     });
   });
 });
