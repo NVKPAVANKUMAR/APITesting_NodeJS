@@ -68,4 +68,14 @@ describe('Users', () => {
         expect(res.body.data).to.deep.include(data);
       });
   });
+
+  it('DELETE /users/:id', () => {
+    return request
+      .delete('users/21')
+      .set('Authorization', `Bearer ${TOKEN}`)
+      .then((res) => {
+        console.log(res.body);
+        expect(res.body.data).to.be.eq(null);
+      });
+  });
 });
